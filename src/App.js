@@ -1,24 +1,45 @@
-import logo from './logo.svg';
 import './App.css';
+import { Container, Heading } from "@chakra-ui/react"
+import { useState } from 'react';
+import axios from "axios";
+import Result from './components/Result';
+import QuestionForm from './components/QuestionForm';
+import computedResult from './utils/computedResult';
 
 function App() {
+  
+  const [selectedValue, setSelectedValue] = useState({});
+  const [answer, setAnswer] = useState('');
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    let result = computedResult(selectedValue);
+    axios.get(`https://my-json-server.typicode.com/YuliiaSalai/quiz/results/${result}`)
+    .then(res=>setAnswer(res.data))
+    .then(()=>window.scrollTo(0, document.documentElement.scrollHeight))
+    .catch(err=>console.log(err))
+  }
+
+  const handleChange = ({target}) =>{
+    target.value > 0 ? setSelectedValue({...selectedValue, [target.id]: target.value}) 
+    : setSelectedValue({...selectedValue, [target.id]: 0})
+  }
+
+  const handleClick = () =>{
+    setAnswer('');
+    setSelectedValue({});
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Container p={10}>
+    <Heading mb={5}>Tell Us Your Favorite Foods And We’ll Guess What Type Of Personality You Have</Heading>
+      <QuestionForm 
+      handleSubmit={handleSubmit} 
+      handleChange={handleChange}
+      selectedValue={selectedValue}
+      />
+      {answer && <Result answer={answer} handleClick={handleClick}/>}
+    </Container>
   );
 }
 
