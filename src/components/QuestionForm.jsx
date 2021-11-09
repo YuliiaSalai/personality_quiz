@@ -1,16 +1,7 @@
+import React from 'react';
 import { Select, Button} from "@chakra-ui/react"
-import { useState, useEffect } from 'react';
-import axios from "axios";
 
-const QuestionForm = ({ handleChange, handleSubmit, selectedValue}) => {
-  const [questions, setQuestions] = useState([]);
-
-  useEffect(() => {
-    axios.get('https://my-json-server.typicode.com/YuliiaSalai/quiz/questions')
-    .then(res=>setQuestions(res.data))
-    .catch(err=>console.log(err))
-  }, [])
-
+const QuestionForm = ({ handleChange, handleSubmit, selectedValue, questions}) => {
     return (
     <form onSubmit={handleSubmit} aria-label='quiz-form'>
       {questions.map(item=>

@@ -1,3 +1,4 @@
+import React from 'react';
 import { Button, Heading, Text, Box} from "@chakra-ui/react"
 
 const Result = ({answer, handleClick}) => {
